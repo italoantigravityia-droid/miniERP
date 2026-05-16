@@ -8,6 +8,8 @@ export async function searchCities(query: string) {
       return { success: true, data: [] }; // Don't fetch if query is too short
     }
 
+    console.log(`[CITY_SEARCH] Buscando cidades por: "${query}"`);
+
     const cities = await prisma.city.findMany({
       where: {
         nome: {
@@ -21,9 +23,10 @@ export async function searchCities(query: string) {
       }
     });
 
+    console.log(`[CITY_SEARCH] Resultados encontrados: ${cities.length}`);
     return { success: true, data: cities };
-  } catch (error) {
-    console.error("Error searching cities:", error);
+  } catch (error: any) {
+    console.error("[CITY_SEARCH] Erro fatal na busca:", error.message || error);
     return { success: false, error: "Falha ao buscar cidades." };
   }
 }
