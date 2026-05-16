@@ -154,9 +154,10 @@ export function ClientPage({ initialProducts }: { initialProducts: any[] }) {
           <Controller
             name="preco_unitario"
             control={control}
-            render={({ field: { ref, ...rest } }) => (
+            render={({ field: { onChange, value, onBlur } }) => (
               <NumericFormat
-                {...rest}
+                value={value}
+                onBlur={onBlur}
                 customInput={Input}
                 label="Preço Unitário (R$)"
                 thousandSeparator="."
@@ -166,7 +167,7 @@ export function ClientPage({ initialProducts }: { initialProducts: any[] }) {
                 fixedDecimalScale
                 allowNegative={false}
                 onValueChange={(values) => {
-                  rest.onChange(values.floatValue || 0);
+                  onChange(values.floatValue ?? 0);
                 }}
                 error={errors.preco_unitario?.message}
               />
