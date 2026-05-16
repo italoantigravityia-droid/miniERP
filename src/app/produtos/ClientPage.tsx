@@ -92,52 +92,54 @@ export function ClientPage({ initialProducts }: { initialProducts: any[] }) {
 
       <Card>
         <CardContent style={{ padding: 0 }}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Preço Unitário</TableHead>
-                <TableHead>Estoque</TableHead>
-                <TableHead style={{ width: 100 }}>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {initialProducts.length === 0 ? (
+          <div className="table-container">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={4} style={{ textAlign: "center", padding: 32 }}>
-                    Nenhum produto cadastrado.
-                  </TableCell>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Preço Unitário</TableHead>
+                  <TableHead>Estoque</TableHead>
+                  <TableHead style={{ width: 100 }}>Ações</TableHead>
                 </TableRow>
-              ) : (
-                initialProducts.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell>{product.nome}</TableCell>
-                    <TableCell>
-                      {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.preco_unitario)}
-                    </TableCell>
-                    <TableCell>
-                      <span style={{ 
-                        color: product.estoque === 0 ? 'var(--md-sys-color-error)' : 'inherit',
-                        fontWeight: product.estoque === 0 ? 'bold' : 'normal'
-                      }}>
-                        {product.estoque} un.
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <Button variant="text" size="sm" onClick={() => openModal(product)}>
-                          <Edit size={16} />
-                        </Button>
-                        <Button variant="text" size="sm" onClick={() => handleDelete(product.id)} style={{ color: 'var(--md-sys-color-error)' }}>
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {initialProducts.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} style={{ textAlign: "center", padding: 32 }}>
+                      Nenhum produto cadastrado.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  initialProducts.map((product) => (
+                    <TableRow key={product.id}>
+                      <TableCell>{product.nome}</TableCell>
+                      <TableCell>
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(product.preco_unitario)}
+                      </TableCell>
+                      <TableCell>
+                        <span style={{ 
+                          color: product.estoque === 0 ? 'var(--md-sys-color-error)' : 'inherit',
+                          fontWeight: product.estoque === 0 ? 'bold' : 'normal'
+                        }}>
+                          {product.estoque} un.
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <Button variant="text" size="sm" onClick={() => openModal(product)}>
+                            <Edit size={16} />
+                          </Button>
+                          <Button variant="text" size="sm" onClick={() => handleDelete(product.id)} style={{ color: 'var(--md-sys-color-error)' }}>
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 

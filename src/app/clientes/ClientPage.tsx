@@ -122,47 +122,49 @@ export function ClientPage({ initialCustomers }: { initialCustomers: any[] }) {
 
       <Card>
         <CardContent style={{ padding: 0 }}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Documento</TableHead>
-                <TableHead>E-mail</TableHead>
-                <TableHead>Telefone</TableHead>
-                <TableHead>Cidade/UF</TableHead>
-                <TableHead style={{ width: 100 }}>Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {initialCustomers.length === 0 ? (
+          <div className="table-container">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={6} style={{ textAlign: "center", padding: 32 }}>
-                    Nenhum cliente cadastrado.
-                  </TableCell>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Documento</TableHead>
+                  <TableHead>E-mail</TableHead>
+                  <TableHead>Telefone</TableHead>
+                  <TableHead>Cidade/UF</TableHead>
+                  <TableHead style={{ width: 100 }}>Ações</TableHead>
                 </TableRow>
-              ) : (
-                initialCustomers.map((customer) => (
-                  <TableRow key={customer.id}>
-                    <TableCell>{customer.nome}</TableCell>
-                    <TableCell>{customer.documento}</TableCell>
-                    <TableCell>{customer.email || "-"}</TableCell>
-                    <TableCell>{customer.telefone || "-"}</TableCell>
-                    <TableCell>{customer.cidade ? `${customer.cidade.nome} - ${customer.cidade.uf}` : "-"}</TableCell>
-                    <TableCell>
-                      <div style={{ display: 'flex', gap: 8 }}>
-                        <Button variant="text" size="sm" onClick={() => openModal(customer)}>
-                          <Edit size={16} />
-                        </Button>
-                        <Button variant="text" size="sm" onClick={() => handleDelete(customer.id)} style={{ color: 'var(--md-sys-color-error)' }}>
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
+              </TableHeader>
+              <TableBody>
+                {initialCustomers.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} style={{ textAlign: "center", padding: 32 }}>
+                      Nenhum cliente cadastrado.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  initialCustomers.map((customer) => (
+                    <TableRow key={customer.id}>
+                      <TableCell>{customer.nome}</TableCell>
+                      <TableCell>{customer.documento}</TableCell>
+                      <TableCell>{customer.email || "-"}</TableCell>
+                      <TableCell>{customer.telefone || "-"}</TableCell>
+                      <TableCell>{customer.cidade ? `${customer.cidade.nome} - ${customer.cidade.uf}` : "-"}</TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <Button variant="text" size="sm" onClick={() => openModal(customer)}>
+                            <Edit size={16} />
+                          </Button>
+                          <Button variant="text" size="sm" onClick={() => handleDelete(customer.id)} style={{ color: 'var(--md-sys-color-error)' }}>
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
 

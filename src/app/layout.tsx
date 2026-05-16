@@ -68,6 +68,26 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+
+          {/* Navegação Mobile Inferior */}
+          <nav className={styles.mobileNav}>
+            <Link href="/" className={styles.mobileNavItem}>
+              <LayoutDashboard size={24} />
+              <span>Início</span>
+            </Link>
+            <Link href="/clientes" className={styles.mobileNavItem}>
+              <Users size={24} />
+              <span>Clientes</span>
+            </Link>
+            <Link href="/produtos" className={styles.mobileNavItem}>
+              <Package size={24} />
+              <span>Produtos</span>
+            </Link>
+            <Link href="/pdv" className={styles.mobileNavItem}>
+              <ShoppingCart size={24} />
+              <span>PDV</span>
+            </Link>
+          </nav>
         </div>
       </body>
     </html>

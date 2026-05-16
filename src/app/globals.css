@@ -96,6 +96,75 @@ a:hover {
   padding: 0 16px;
 }
 
+/* Tabelas Responsivas */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .md-headline {
+    font-size: 24px !important;
+  }
+  
+  .md-card {
+    border-radius: var(--md-sys-shape-corner-medium) !important;
+  }
+}
+
+/* PDV Layout Responsivo */
+.pdv-layout {
+  display: flex;
+  gap: 24px;
+  height: calc(100vh - 120px);
+}
+
+.pdv-products {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.pdv-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.pdv-cart {
+  flex: 1;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .pdv-layout {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .pdv-products {
+    overflow: visible;
+  }
+
+  .pdv-products-grid {
+    overflow: visible;
+  }
+
+  .pdv-cart {
+    min-width: 100%;
+    margin-top: 24px;
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

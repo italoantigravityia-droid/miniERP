@@ -82,12 +82,12 @@ export function ClientPage({ customers, products }: { customers: any[], products
   };
 
   return (
-    <div style={{ display: 'flex', gap: 24, height: 'calc(100vh - 120px)' }}>
+    <div className="pdv-layout">
       {/* Left side - Products */}
-      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 16, overflow: 'hidden' }}>
-        <h2 style={{ font: 'var(--md-sys-typescale-headline-large)', margin: 0 }}>Produtos</h2>
+      <div className="pdv-products">
+        <h2 style={{ font: 'var(--md-sys-typescale-headline-large)', margin: '0 0 16px 0' }}>Produtos</h2>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, overflowY: 'auto', paddingRight: 8 }}>
+        <div className="pdv-products-grid">
           {products.map(product => (
             <Card key={product.id} style={{ display: 'flex', flexDirection: 'column' }}>
               <CardContent style={{ padding: 16, flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -114,7 +114,7 @@ export function ClientPage({ customers, products }: { customers: any[], products
       </div>
 
       {/* Right side - Cart */}
-      <div style={{ flex: 1, minWidth: 350, display: 'flex', flexDirection: 'column' }}>
+      <div className="pdv-cart">
         <Card style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardHeader>
             <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
