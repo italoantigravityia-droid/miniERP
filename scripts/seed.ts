@@ -29,6 +29,8 @@ async function main() {
 
     console.log(`Baixados ${cities.length} municípios. Limpando tabela e inserindo no banco de dados...`);
 
+    // Deletar clientes primeiro para evitar erro de chave estrangeira
+    await prisma.customer.deleteMany({});
     await prisma.city.deleteMany({});
 
     const chunkSize = 500;
