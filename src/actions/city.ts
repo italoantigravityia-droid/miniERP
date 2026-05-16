@@ -11,7 +11,8 @@ export async function searchCities(query: string) {
     const cities = await prisma.city.findMany({
       where: {
         nome: {
-          contains: query
+          contains: query,
+          mode: 'insensitive'
         }
       },
       take: 20, // Limit to top 20 to keep it fast
