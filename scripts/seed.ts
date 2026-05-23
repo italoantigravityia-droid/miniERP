@@ -29,9 +29,12 @@ async function main() {
 
     console.log(`Baixados ${cities.length} municípios. Limpando tabela e inserindo no banco de dados...`);
 
-    // Deletar clientes primeiro para evitar erro de chave estrangeira
-    await prisma.customer.deleteMany({});
-    await prisma.city.deleteMany({});
+    // Verificar se já existem cidades para evitar erro de chave estrangeira e lentidão no deploy
+    const cityCount = await prisma.city.count();
+    if (cityCount > 0) {
+      console.log(`Tabela de Cidades já possui ${cityCount} registros. Pulando seed.`);
+      return;
+    }
 
     const chunkSize = 500;
     for (let i = 0; i < cities.length; i += chunkSize) {

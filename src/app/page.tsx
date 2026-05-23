@@ -7,7 +7,16 @@ export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   const response = await getDashboardMetrics();
-  const metrics = response.success ? response.data : {
+  const {
+    totalOrders = 0,
+    totalRevenue = 0,
+    averageTicket = 0,
+    totalCustomers = 0,
+    totalProducts = 0,
+    lowStockProducts = 0,
+    salesHistory = [],
+    topProducts = []
+  } = response.success && response.data ? response.data : {
     totalOrders: 0,
     totalRevenue: 0,
     averageTicket: 0,
@@ -19,8 +28,8 @@ export default async function DashboardPage() {
   };
 
   // Calcular pontos para o gráfico SVG de Faturamento
-  const hasHistory = metrics.salesHistory && metrics.salesHistory.length > 0;
-  const maxValue = hasHistory ? Math.max(...metrics.salesHistory.map(s => s.value), 100) : 100;
+  const hasHistory = salesHistory && salesHistory.length > 0;
+  const maxValue = hasHistory ? Math.max(...salesHistory.map(s => s.value), 100) : 100;
   const width = 600;
   const height = 180;
   const paddingBottom = 30;
@@ -29,8 +38,8 @@ export default async function DashboardPage() {
 
   // Gerar coordenadas dos pontos do gráfico
   const points = hasHistory
-    ? metrics.salesHistory.map((s, i) => {
-        const x = (i * width) / (metrics.salesHistory.length - 1 || 1);
+    ? salesHistory.map((s, i) => {
+        const x = (i * width) / (salesHistory.length - 1 || 1);
         const y = height - paddingBottom - (s.value * graphHeight) / maxValue;
         return `${x},${y}`;
       }).join(" ")
@@ -68,7 +77,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent style={{ paddingTop: 12 }}>
             <div style={{ fontSize: 28, fontWeight: 'bold' }}>
-              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.totalRevenue)}
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRevenue)}
             </div>
             <p style={{ marginTop: 4, fontSize: 12, opacity: 0.8 }}>Total acumulado de vendas</p>
           </CardContent>
@@ -83,7 +92,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent style={{ paddingTop: 12 }}>
             <div style={{ fontSize: 28, fontWeight: 'bold', color: 'var(--md-sys-color-on-surface)' }}>
-              {metrics.totalOrders}
+              {totalOrders}
             </div>
             <p style={{ marginTop: 4, fontSize: 12, color: 'var(--md-sys-color-on-surface-variant)' }}>Vendas finalizadas no total</p>
           </CardContent>
@@ -98,17 +107,17 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent style={{ paddingTop: 12 }}>
             <div style={{ fontSize: 28, fontWeight: 'bold', color: 'var(--md-sys-color-on-surface)' }}>
-              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.averageTicket)}
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(averageTicket)}
             </div>
             <p style={{ marginTop: 4, fontSize: 12, color: 'var(--md-sys-color-on-surface-variant)' }}>Média de valor por venda</p>
           </CardContent>
         </Card>
 
         {/* KPI 4: Estoque Crítico */}
-        <Card style={metrics.lowStockProducts > 0 ? { border: '1px solid var(--md-sys-color-error)' } : {}}>
+        <Card style={lowStockProducts > 0 ? { border: '1px solid var(--md-sys-color-error)' } : {}}>
           <CardHeader style={{ borderBottom: 'none', paddingBottom: 0 }}>
             <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 16 }}>
-              {metrics.lowStockProducts > 0 ? (
+              {lowStockProducts > 0 ? (
                 <AlertTriangle size={20} color="var(--md-sys-color-error)" />
               ) : (
                 <Package size={20} color="var(--md-sys-color-primary)" />
@@ -120,16 +129,16 @@ export default async function DashboardPage() {
             <div style={{
               fontSize: 28,
               fontWeight: 'bold',
-              color: metrics.lowStockProducts > 0 ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface)'
+              color: lowStockProducts > 0 ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface)'
             }}>
-              {metrics.lowStockProducts}
+              {lowStockProducts}
             </div>
             <p style={{
               marginTop: 4,
               fontSize: 12,
-              color: metrics.lowStockProducts > 0 ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'
+              color: lowStockProducts > 0 ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'
             }}>
-              {metrics.lowStockProducts > 0 ? 'Produtos com menos de 5 unidades' : 'Todos os estoques regularizados'}
+              {lowStockProducts > 0 ? 'Produtos com menos de 5 unidades' : 'Todos os estoques regularizados'}
             </p>
           </CardContent>
         </Card>
@@ -172,8 +181,8 @@ export default async function DashboardPage() {
                   <polyline points={points} fill="none" stroke="var(--md-sys-color-primary)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
 
                   {/* Círculos e Valores */}
-                  {metrics.salesHistory.map((s, i) => {
-                    const x = (i * width) / (metrics.salesHistory.length - 1 || 1);
+                  {salesHistory.map((s, i) => {
+                    const x = (i * width) / (salesHistory.length - 1 || 1);
                     const y = height - paddingBottom - (s.value * graphHeight) / maxValue;
                     return (
                       <g key={i}>
@@ -215,7 +224,7 @@ export default async function DashboardPage() {
                   <Users size={14} /> Clientes Cadastrados
                 </div>
                 <div style={{ fontSize: 20, fontWeight: 'bold', marginTop: 2, color: 'var(--md-sys-color-on-surface)' }}>
-                  {metrics.totalCustomers}
+                  {totalCustomers}
                 </div>
               </div>
               <div style={{ width: 1, backgroundColor: 'var(--md-sys-color-outline-variant)' }} />
@@ -224,7 +233,7 @@ export default async function DashboardPage() {
                   <Package size={14} /> Total de Itens no Catálogo
                 </div>
                 <div style={{ fontSize: 20, fontWeight: 'bold', marginTop: 2, color: 'var(--md-sys-color-on-surface)' }}>
-                  {metrics.totalProducts}
+                  {totalProducts}
                 </div>
               </div>
             </div>
@@ -234,13 +243,13 @@ export default async function DashboardPage() {
               <div style={{ fontSize: 13, fontWeight: 'bold', color: 'var(--md-sys-color-on-surface-variant)' }}>
                 TOP PRODUTOS POR FATURAMENTO
               </div>
-              {!metrics.topProducts || metrics.topProducts.length === 0 ? (
+              {!topProducts || topProducts.length === 0 ? (
                 <div style={{ padding: 24, textAlign: 'center', color: 'var(--md-sys-color-on-surface-variant)', fontSize: 14 }}>
                   Nenhum produto vendido ainda.
                 </div>
               ) : (
-                metrics.topProducts.map((product, index) => {
-                  const maxRevenue = Math.max(...metrics.topProducts.map(p => p.receita), 1);
+                topProducts.map((product, index) => {
+                  const maxRevenue = Math.max(...topProducts.map(p => p.receita), 1);
                   const widthPercent = (product.receita / maxRevenue) * 100;
                   return (
                     <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -297,14 +306,14 @@ export default async function DashboardPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!metrics.topProducts || metrics.topProducts.length === 0 ? (
+              {!topProducts || topProducts.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} style={{ textAlign: 'center', padding: 32 }}>
                     Sem dados comerciais suficientes.
                   </TableCell>
                 </TableRow>
               ) : (
-                metrics.topProducts.map((product, index) => (
+                topProducts.map((product, index) => (
                   <TableRow key={index}>
                     <TableCell style={{ fontWeight: 'bold', color: 'var(--md-sys-color-primary)' }}>{index + 1}º</TableCell>
                     <TableCell style={{ fontWeight: '500' }}>{product.nome}</TableCell>
